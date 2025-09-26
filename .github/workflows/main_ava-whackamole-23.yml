@@ -13,23 +13,22 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write         # needed for azure/login (OIDC)
-      contents: read          # needed for actions/checkout
+      id-token: write   # required for azure/login
+      contents: read    # required for actions/checkout
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Login to Azure
+      - name: Azure Login (OIDC)
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4EDB9AE076C7436EAC2F55EC9EFB44E5 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_487BFAE4FA4F9E395C30A556B07D9C }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_112B30E2302C4596BCE874FB50864AC0 }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'ava-whackamole-23'
           package: .
-          # slot-name: 'Production'   # leave commented unless you use slots
